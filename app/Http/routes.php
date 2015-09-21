@@ -1,16 +1,9 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
 
-Route::get('/', function () {
-    return view('welcome');
-});
+get('/', 'PagesController@index');
+get('/home', 'PagesController@index');
+
+get('auth/login', 'Auth\AuthController@redirectToTeleserv');
+get('auth/logout', 'Auth\AuthController@globalLogout');
+get('auth/teleserv/callback', 'Auth\AuthController@handleTeleservCallback');

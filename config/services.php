@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'teleserv' => [
+        'client_id' => env('TELESERV_APP_ID'),
+        'client_secret' => env('TELESERV_APP_SECRET'),
+        'redirect' => env('TELESERV_REDIRECT'),
+        'base' => env('TELESERV_BASE'),
+    ],
 ];
