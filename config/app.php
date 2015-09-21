@@ -149,6 +149,7 @@ return [
         SocialiteProviders\Manager\ServiceProvider::class,
         SocialiteProviders\Teleserv\HydraServiceProvider::class,
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
+        AdamWathan\BootForms\BootFormsServiceProvider::class,
     ],
 
     /*
@@ -201,6 +202,7 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
+        'BootForm' => AdamWathan\BootForms\Facades\BootForm::class,
     ],
 
 ];
