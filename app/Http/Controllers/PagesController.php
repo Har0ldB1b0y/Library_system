@@ -19,6 +19,7 @@ class PagesController extends Controller
 
     public function index()
     {
+        alert()->success('You configured it.');
         return view('pages.index');
     }
 }
