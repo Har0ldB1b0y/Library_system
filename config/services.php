@@ -41,4 +41,8 @@ return [
         'redirect' => env('TELESERV_REDIRECT'),
         'base' => env('TELESERV_BASE'),
     ],
+
+    'socketio' => [
+        'url' => env('SOCKETIO_URL'),
+    ],
 ];
