@@ -10,7 +10,8 @@
         "zizaco/entrust": "^1.4",
         "hydra/socialiteprovider": "^1.1",
         "uxweb/sweet-alert": "^1.1",
-        "adamwathan/bootforms": "^0.7.0"
+        "adamwathan/bootforms": "^0.7.0",
+        "bzarzuela/modelfilter": "^0.1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
