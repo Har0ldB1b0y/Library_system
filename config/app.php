@@ -150,6 +150,7 @@ return [
         SocialiteProviders\Teleserv\HydraServiceProvider::class,
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
         AdamWathan\BootForms\BootFormsServiceProvider::class,
+        Laracasts\Flash\FlashServiceProvider::class,
     ],
 
     /*
