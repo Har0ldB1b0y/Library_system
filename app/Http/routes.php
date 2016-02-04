@@ -1,9 +1,9 @@
 <?php
 
 
-get('/', 'PagesController@index');
-get('/home', 'PagesController@index');
+Route::get('/', 'PagesController@index');
+Route::get('/home', 'PagesController@index');
 
-get('auth/login', 'Auth\AuthController@redirectToTeleserv');
-get('auth/logout', 'Auth\AuthController@globalLogout');
-get('auth/teleserv/callback', 'Auth\AuthController@handleTeleservCallback');
+Route::get('auth/login', 'Auth\AuthController@redirectToTeleserv');
+Route::get('auth/logout', 'Auth\AuthController@globalLogout');
+Route::get('auth/teleserv/callback', 'Auth\AuthController@handleTeleservCallback');
