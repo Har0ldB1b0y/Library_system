@@ -54,7 +54,8 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+//    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'noreply@teleserv.ph', 'name' => 'PTI Asterisk Reports'],
 
     /*
     |--------------------------------------------------------------------------

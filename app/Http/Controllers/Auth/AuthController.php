@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use SocialiteProviders\Teleserv\AuthenticatesUsingHydra;
 
 
 class AuthController extends Controller
@@ -23,7 +22,9 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins, AuthenticatesUsingHydra;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    protected $redirectAfterLogout = 'login';
 
     /**
      * Create a new authentication controller instance.
@@ -32,7 +33,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => ['getLogout', 'globalLogout']]);
+        $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
     /**
@@ -63,5 +64,14 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    protected function authenticated($request, $user)
+    {
+        if($user->roles[0]->name == 'admin') {
+            return redirect()->intended('/');
+        }
+
+        return redirect()->intended('/');
     }
 }

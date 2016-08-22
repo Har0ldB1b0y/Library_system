@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'url' => 'http://base-project.app',
+    'url' => 'http://spusm.app',
 
     /*
     |--------------------------------------------------------------------------
@@ -157,8 +157,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Zizaco\Entrust\EntrustServiceProvider::class,
-        SocialiteProviders\Manager\ServiceProvider::class,
-        SocialiteProviders\Teleserv\HydraServiceProvider::class,
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
         AdamWathan\BootForms\BootFormsServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
@@ -212,7 +210,6 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'BootForm' => AdamWathan\BootForms\Facades\BootForm::class,
     ],

@@ -8,7 +8,6 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "zizaco/entrust": "^1.4",
-        "hydra/socialiteprovider": "^1.1",
         "uxweb/sweet-alert": "^1.1",
         "adamwathan/bootforms": "^0.7.0",
         "bzarzuela/modelfilter": "^0.1.1",
@@ -56,11 +55,5 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@gitlab.teleserv.ph:hydra/socialiteprovider.git"
-        }
-    ]
+    }
 }
