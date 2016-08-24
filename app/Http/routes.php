@@ -17,5 +17,10 @@ Route::resource('admin/books', 'Admin\BooksController');
 Route::post('/admin/materials/filter', 'Admin\MaterialsController@filter');
 Route::resource('admin/materials', 'Admin\MaterialsController');
 
+//Students
+Route::post('/admin/students/filter', 'StudentsController@filter');
+Route::resource('/admin/students','StudentsController');
 
-
+//Faculties
+Route::post('/admin/faculties/filter', 'FacultiesController@filter');
+Route::resource('/admin/faculties','FacultiesController');

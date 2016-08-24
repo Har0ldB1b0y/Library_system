@@ -39,4 +39,10 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+
+    public function student()
+    {
+        $this->hasOne(Student::class);
+    }
 }

@@ -142,7 +142,18 @@
 @include('nav')
 
 <div id = "content">
+    <div id="content-header">
+        <div class="header-bg">
+            <div class="container">
+                <div class="col-lg-12">
+                    <h4>@yield('header')</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 	@include('flash::message')
+
+
     @yield('content')
 </div>
 

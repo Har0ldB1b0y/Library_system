@@ -40,6 +40,13 @@
 
                     <li><a href="{{url('admin/users')}}">Reports</a></li>
 
+                    @if(URL::current() == URL::route('admin.students.index') || URL::current() == URL::route('admin.students.create'))
+                        <li class="active">
+                    @else
+                        <li>
+                    @endif
+                            <a href="{{url('/admin/students')}}">Students</a></li>
+
                 @endif
 
 
