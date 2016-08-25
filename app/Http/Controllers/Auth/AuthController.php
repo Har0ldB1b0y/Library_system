@@ -68,8 +68,8 @@ class AuthController extends Controller
 
     protected function authenticated($request, $user)
     {
-        if($user->roles[0]->name == 'admin') {
-            return redirect()->intended('/');
+        if ($user->roles[0]->name == 'admin' || $user->roles[0]->name == 'student' || $user->roles[0]->name == 'faculty') {
+            return redirect()->intended('admin/transaction');
         }
 
         return redirect()->intended('/');

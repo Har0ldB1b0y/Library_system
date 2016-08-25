@@ -16,35 +16,15 @@
             <div class="panel" style="border-width: 2px;border-color:#5cb85c">
                 <div class="panel-body">
                     {!! BootForm::openHorizontal(['sm' => [1,11]])->addClass('search-panel') !!}
-                    {!! BootForm::select('Filter By', 'filter_by', ['' => '-- FILTER SEARCH --', 'keyword' => 'Keyword', 'name' => 'Title', 'author' => 'Author', 'subject' => 'Subject'])->addClass('excludeSelect') !!}
+                    {!! BootForm::bind($request) !!}
+                    {!! BootForm::select('Filter By', 'filter_by', ['' => '-- FILTER SEARCH --', 'books.title' => 'Book Title', 'authors.name' => 'Author', 'subjects.name' => 'Subject'])->addClass('excludeSelect') !!}
                     {!! BootForm::text('Search', 'search') !!}
-                    {{--<div class="form-group search-panel">--}}
-                        {{--<label class="control-label col-sm-2">Search: </label>--}}
-
-                        {{--<div class="col-sm-6">--}}
-                            {{--<div class="input-group input-group-sm">--}}
-                                {{--<input type="text" class="form-control" aria-describedby="sizing-addon1">--}}
-                                {{--<span class="input-group-addon" id="sizing-addon1"><i class="glyphicon--}}
-                                {{--glyphicon-search"></i></span>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--<div class="col-sm-4">--}}
-                            {{--<select class="form-control" name="filter" id="filter">--}}
-                                {{--<option value="">-- FILTER --</option>--}}
-                                {{--<option value="keyword">Keyword</option>--}}
-                                {{--<option value="title">Title</option>--}}
-                                {{--<option value="author">Author</option>--}}
-                                {{--<option value="subject">Subject</option>--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-
-                    {{--</div>--}}
                     {!! BootForm::close() !!}
 
                 </div>
             </div>
             <br>
+            @if (isset($data))
 
             <div class="table-responsive">
 
@@ -62,20 +42,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Card Number</td>
-                        <td>Call Number</td>
-                        <td>Title</td>
-                        <td>Autdor</td>
-                        <td>Subject</td>
-                        <td>Publisher</td>
-                        <td>Date Published</td>
-                        <td>Action</td>
-                    </tr>
+                    @forelse($data as $value)
+                        <tr>
+                            <td>{{$value->card_number}}</td>
+                            <td>{{$value->call_number}}</td>
+                            <td>{{$value->title}}</td>
+                            <td>
+                            @foreach ($value->authors as $author)
+                                {{$author->name}} <br>
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach ($value->subjects as $subject)
+                                    {{$subject->name}} <br>
+                                @endforeach
+                            </td>
+                            <td>{{$value->publisher}}</td>
+                            <td>{{$value->published_year}}</td>
+                            <td>
+                                <a href="{{url('admin/books/' . $value->id)}}" role="button" class="btn btn-success btn-xs">View</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <th colspan="8" class="text-danger">No records found</th>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
+            <div class="text-center">
 
+            {!! $data->render() !!}
+            </div>
+            @endif
         </div>
 
     </div>

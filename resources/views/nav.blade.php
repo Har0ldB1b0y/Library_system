@@ -23,38 +23,45 @@
             <a href="/">OPAC</a></li>
 
             @if (Auth::check())
-                @if (Auth::user()->hasRole('admin'))
+                    @if(URL::current() == URL::route('admin.transaction.index'))
+                        <li class="active">
+                    @else
+                        <li>
+                    @endif
+                    <a href="{{url('admin/transaction')}}">TRANSACTIONS</a></li>
+
+                    @if (Auth::user()->hasRole('admin'))
                     @if(URL::current() == URL::route('admin.users.index') || URL::current() == URL::route('admin.users.create'))
                         <li class="active">
                     @else
                         <li>
                     @endif
-                    <a href="{{url('admin/users')}}">Users</a></li>
+                    <a href="{{url('admin/users')}}">USERS</a></li>
 
                     @if(URL::current() == URL::route('admin.books.index') || URL::current() == URL::route('admin.books.create') || URL::current() == URL::route('admin.materials.index') || URL::current() == URL::route('admin.materials.create'))
                         <li class="active">
                     @else
                         <li>
                     @endif
-                    <a href="{{url('admin/books')}}">Books</a></li>
+                    <a href="{{url('admin/books')}}">BOOKS</a></li>
 
-                    <li><a href="{{url('admin/users')}}">Reports</a></li>
+                    <li><a href="{{url('admin/users')}}">REPORTS</a></li>
 
                 @endif
 
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Settings <span class="caret"></span></a>
+                       aria-expanded="false">SETTINGS <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{url('sorting')}}">Change Password</a></li>
                     </ul>
 
                 </li>
 
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/logout">LOGOUT</a></li>
             @else
-                <li><a href="/login">Login</a></li>
+                <li><a href="/login">LOGIN</a></li>
             @endif
         </ul>
     </div><!-- /.navbar-collapse -->

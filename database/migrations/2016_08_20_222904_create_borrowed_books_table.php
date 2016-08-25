@@ -12,9 +12,9 @@ class CreateBorrowedBooksTable extends Migration
      */
     public function up()
     {
-        Schema::create('borrowed_books', function (Blueprint $table) {
+        Schema::create('transaction', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('book_id')->nullable()->unsigned();
+            $table->integer('book_id')->unsigned();
 
             $table->foreign('book_id')
               ->references('id')
@@ -22,7 +22,7 @@ class CreateBorrowedBooksTable extends Migration
               ->onUpdate('cascade')
               ->onDelete('cascade');
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('user_id')->unsigned();
 
             $table->foreign('user_id')
               ->references('id')
@@ -30,13 +30,14 @@ class CreateBorrowedBooksTable extends Migration
               ->onUpdate('cascade')
               ->onDelete('cascade');
 
-            $table->integer('quantity')->unsigned();
-            $table->enum('type', ['reserved', 'borrowed']);
-            $table->timestamp('borrowed_at')->index();
-            $table->timestamp('returned_at')->index();
-            $table->integer('is_expired')->index();
-            $table->integer('is_overdue')->index();
-            $table->integer('is_lost')->index();
+            $table->enum('type', ['reserved', 'non-reserved']);
+            $table->timestamp('reserved_at')->index();
+            $table->timestamp('borrowed_at')->nullable()->index();
+            $table->timestamp('return_at')->nullable()->index();
+            $table->timestamp('returned_at')->nullable()->index();
+            $table->boolean('is_expired')->index();
+            $table->boolean('is_overdue')->index();
+            $table->boolean('is_lost')->index();
 
             $table->timestamps();
         });

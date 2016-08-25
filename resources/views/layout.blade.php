@@ -9,7 +9,7 @@
     @yield('internal_stylesheet')
     <style type="text/css">
         html, body {
-            font-size: 16px;
+            font-size: 13px;
             margin:0;
             height:100%;
         }

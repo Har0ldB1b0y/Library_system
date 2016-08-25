@@ -27,4 +27,26 @@ class Book extends Model
         return $this->belongsToMany(Subject::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function generateBarcode()
+    {
+        $barcode = '';
+        while (true) {
+            $barcode = date('Ymd').sprintf("%06d", mt_rand(1, 999999));
+
+            try {
+                $book = $this->where('barcode', '=', $barcode)->firstOrFail();
+
+            } catch(ModelNotFoundException $e) {
+                break;
+            }
+        }
+
+        return $barcode;
+    }
+
 }

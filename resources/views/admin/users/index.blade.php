@@ -78,7 +78,10 @@
                             @endforelse
                         </table>
                     </div>
+                    <div class="text-center">
+
                     {!! $users->render() !!}
+                    </div>
                 </div>
     </div>
     </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Subject;
+use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -133,7 +135,9 @@ class BooksController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::with('authors', 'subjects')->findOrFail($id);
+
+        return view('admin.books.show', compact('book'));
     }
 
     /**
@@ -175,5 +179,39 @@ class BooksController extends Controller
         $this->model_filter->setFormData($request->except('_token'));
 
         return redirect('/admin/books');
+    }
+
+    public function reserve($id)
+    {
+        $book = Book::findOrFail($id);
+
+        if ($book->available_quantity > 0) {
+            $borrowed_quantity = ($book->available_quantity - 1);
+
+            $borrow_book = Transaction::create([
+              'book_id'     => $book->id,
+              'user_id'     => Auth::user()->id,
+              'quantity'    => $book->available_quantity,
+              'type'        => 'reserved',
+              'reserved_at' => Carbon::now(),
+              'borrowed_at' => null,
+              'returned_at' => null,
+              'is_expired'  => false,
+              'is_overdue'  => false,
+              'is_lost'     => false
+            ]);
+
+            $borrow_book->save();
+
+            $book->available_quantity = $borrowed_quantity;
+            $book->save();
+            alert()->success(strtoupper($book->title) . " is now reserved.");
+        } else {
+            alert()->warning("There are no available copies of this book.");
+            return back();
+        }
+
+        return redirect('admin/transaction');
+
     }
 }

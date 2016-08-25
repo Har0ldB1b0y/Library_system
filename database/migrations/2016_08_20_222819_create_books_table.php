@@ -15,11 +15,13 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->index();
+            $table->string('barcode', 50)->index();
             $table->string('publisher', 50);
             $table->integer('published_year');
             $table->string('card_number', 50);
             $table->string('call_number', 50);
             $table->integer('quantity')->unsigned();
+            $table->integer('available_quantity')->unsigned()->nullable();
             $table->integer('material_id')->unsigned();
 
             $table->foreign('material_id')

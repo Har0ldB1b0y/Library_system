@@ -38,13 +38,19 @@
                 <div class="col-sm-3 search-panel">
                     <h4 class="text-success">Search Panel</h4>
                     <br>
+                    <?php
+                    $max_year = 2070;
+                    for ($i = 1700; $i <= $max_year; $i++) {
+                        $year[$i] = $i;
+                    }
+                    ?>
                     {!! BootForm::open()->action('/admin/books/filter') !!}
                     {!! BootForm::bind($filters) !!}
                     {!! BootForm::text('Call Number', 'call_number') !!}
                     {!! BootForm::text('Card Number', 'card_number') !!}
                     {!! BootForm::text('Title', 'title') !!}
                     {!! BootForm::text('Publisher', 'publisher') !!}
-                    {!! BootForm::text('Year Published', 'published_year') !!}
+                    {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year) !!}
                     {!! BootForm::select('Sort By', 'sort', ['id' => 'ID', 'card_number' => 'Card Number', 'call_number' => 'Call Number', 'title' => 'Title', 'publisher' => 'Publisher', 'published_year' => 'Year Published']) !!}
                     {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending']) !!}
                     {!! BootForm::submit('Search')->addClass('btn btn-success') !!}
@@ -68,7 +74,7 @@
                             </tr>
                             @forelse($books as $book)
                                 <tr>
-                                    <td>{{$book->card_number}}</td>
+                                    <td><div class="barcode" style="height:30px">{{$book->barcode}}</div>
                                     <td>{{$book->call_number}}</td>
                                     <td>{{$book->title}}</td>
                                     <td>
@@ -94,7 +100,10 @@
                             @endforelse
                         </table>
                     </div>
+                    <div class="text-center">
+
                     {!! $books->render() !!}
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,3 +112,15 @@
     <br>
 
 @endsection
+
+@section('javascript')
+    <script src="js/jquery-barcode.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".barcode").each(function (i, e) {
+                $(e).barcode($(e).text(), "code128", { showHRI: false} );
+            });
+        });
+
+    </script>
+@stop
