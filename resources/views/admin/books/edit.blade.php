@@ -1,6 +1,7 @@
 @inject('materials', 'App\Models\Material')
 @inject('authors', 'App\Models\Author')
 @inject('subjects', 'App\Models\Subject')
+@inject('books', 'App\Models\Book')
 
 
 @extends('layout')
@@ -31,29 +32,31 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 self-class">
-                <p style="font-size: 25px; text-align: center">Add <strong style="color:#3c763d">NEW</strong></p>
+                <p style="font-size: 25px; text-align: center">Edit <strong style="color:#3c763d">BOOK</strong></p>
                 <br>
                 <div class="col-md-6">
                     <?php
-                        $max_year = 2070;
-                        for ($i = 1700; $i <= $max_year; $i++) {
-                            $year[$i] = $i;
-                        }
+                    $max_year = 2070;
+                    for ($i = 1700; $i <= $max_year; $i++) {
+                        $year[$i] = $i;
+                    }
                     ?>
-                    {!! BootForm::open()->post()->action(url('admin/books')) !!}
-                    {!! BootForm::hidden('barcode')->value($barcode) !!}
-                    {!! BootForm::text('Card Number', 'card_number') !!}
-                    {!! BootForm::text('Call Number', 'call_number') !!}
-                    {!! BootForm::text('Title', 'title') !!}
-                    {!! BootForm::select('Author', 'author')->data('tags', true)->multiple()->style('width:100%') !!}
-                    {!! BootForm::select('Subject', 'subject')->data('tags', true)->multiple()->style('width:100%') !!}
-                    {!! BootForm::select('Material Type', 'material_id', ['' => ''] + $materials->getMaterials())->placeholder('Material Type')->style('width:100%') !!}
-                    {!! BootForm::text('Publisher', 'publisher') !!}
-                    {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year)->style('width:100%') !!}
-                    {!! BootForm::text('Publish Place', 'publish_place') !!}
+                    {!! BootForm::open()->patch()->action(url('admin/books/' . $book->id)) !!}
+                    {!! BootForm::bind($book) !!}
+                    {!! BootForm::text('Card Number', 'card_number')->required() !!}
+                    {!! BootForm::text('Call Number', 'call_number')->required() !!}
+                    {!! BootForm::text('Title', 'title')->required() !!}
+                    {!! BootForm::select('Author', 'authors')->id('authors')->required()->data('tags', true)->multiple
+                    ()->style('width:100%') !!}
+                    {!! BootForm::select('Subject', 'subjectsList[]', $subjects->getSubjects($book->id))->id('subjects')->required()->data('tags', true)->multiple()->style('width:100%') !!}
+                    {!! BootForm::select('Material Type', 'material_id', ['' => ''] + $materials->getMaterials())->placeholder('Material Type')->required()->style('width:100%') !!}
+                    {!! BootForm::text('Publisher', 'publisher')->required() !!}
+                    {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year)->required()->style
+                    ('width:100%') !!}
+                    {!! BootForm::text('Publish Place', 'publish_place')->required() !!}
                     <div class="form-group">
                         <label class="control-label" for="quantity">Copies Available</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control">
+                        <input type="number" name="quantity" id="quantity" class="form-control" required="required">
                     </div>
                     {!! BootForm::text('ISBN', 'isbn') !!}
                     {!! BootForm::select('ETAL', 'etal', ['' => '', 'True' => 'True', 'False' => 'False'])->style('width:100%') !!}
@@ -87,7 +90,7 @@
                 allowClear: true
             });
 
-            $("#author").select2({
+            $("#authors").select2({
                 placeholder: "-- Select Authors --",
                 allowClear: true,
                 minimumInputLength: 3,
@@ -102,20 +105,20 @@
                 }
             });
 
-            $("#subject").select2({
-                placeholder: "-- Select Subjects --",
-                allowClear: true,
-                minimumInputLength: 3,
-                ajax: {
-                    url: '/subjects/search',
-                    data: function (params) {
-                        return {
-                            q: params.term,
-                            page: params.page
-                        };
-                    }
-                }
-            });
+//            $("#subjects").select2({
+//                placeholder: "-- Select Subjects --",
+//                allowClear: true,
+//                minimumInputLength: 3,
+//                ajax: {
+//                    url: '/subjects/search',
+//                    data: function (params) {
+//                        return {
+//                            q: params.term,
+//                            page: params.page
+//                        };
+//                    }
+//                }
+//            });
 
             $("#published_year").select2({
                 placeholder: "-- Select Year Published --",

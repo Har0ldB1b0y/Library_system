@@ -41,7 +41,7 @@
                 {!! BootForm::text('Name', 'name') !!}
                 {!! BootForm::password('Password', 'password') !!}
                 {!! BootForm::text('E-mail', 'email') !!}
-                {!! BootForm::select('Roles', 'roles')->options($roles)->multiple() !!}
+                {!! BootForm::select('Roles', 'roles')->options($roles)->multiple()->style('width:100%') !!}
                 {!! BootForm::submit('Update', 'save')->class('btn btn-success form-control') !!}
                 {!! BootForm::close() !!}
             </div>

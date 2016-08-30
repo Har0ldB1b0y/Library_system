@@ -78,12 +78,24 @@
                         <td>{{ $book->available_quantity }}</td>
                     </tr>
                 </table>
-                {!! BootForm::open()->post()->action(url('admin/reserve-books/' . $book->id)) !!}
-                {!! BootForm::submit('Reserve', 'reserve')->class('btn btn-success form-control') !!}
+                {!! BootForm::open()->id('reserveBook')->post()->action(url('admin/reserve-books/' . $book->id)) !!}
+                {!! BootForm::submit('Reserve', 'reserve')->class('btn btn-success form-control reserve') !!}
                 {!! BootForm::close() !!}
             </div>
         </div>
     </div>
     <br />
     <br />
+@endsection
+
+
+@section('page_js')
+    <script type="text/javascript">
+        $(function() {
+            $('.reserve').prop('disabled', false);
+            $("#reserveBook").on('submit', function (e) {
+                $('.reserve').attr('disabled', 'disabled');
+            });
+        });
+    </script>
 @endsection

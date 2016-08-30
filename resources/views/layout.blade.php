@@ -100,11 +100,15 @@
 
             #content-header h4 {
                 font-size: 16px;
+                font-family: 'lato-regular'!important;
+
             }
         }
         #content-header h4 {
             color: #fff;
             font-size: 24px;
+            font-family: 'lato-regular'!important;
+
         }
         #content-header .header-bg {
             padding: 10px;
@@ -134,6 +138,24 @@
         .pagination > .active > span:hover {
             background-color: #3c763d;
             border-color: #3c763d;
+        }
+
+        .modal-header {
+            padding:9px 15px;
+            border-bottom:1px solid #5cb85c;
+            background-color: #5cb85c;
+            color: white;
+            -webkit-border-top-left-radius: 5px;
+            -webkit-border-top-right-radius: 5px;
+            -moz-border-radius-topleft: 5px;
+            -moz-border-radius-topright: 5px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .modal-backdrop
+        {
+            opacity:0.8 !important;
         }
     </style>
 </head>

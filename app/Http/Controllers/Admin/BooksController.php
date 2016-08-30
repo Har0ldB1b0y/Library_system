@@ -73,7 +73,23 @@ class BooksController extends Controller
      */
     public function create()
     {
-        return view('admin.books.create');
+        if (!Auth::user()->hasRole('admin')) {
+            alert()->error('You are not allowed to manage Books');
+            return back();
+        }
+
+        $barcode = '';
+        $check_barcode = date('Ymd').sprintf("%06d", mt_rand(1, 999999));
+
+        $book = Book::where('barcode', '=', $check_barcode)->first();
+
+        if (!$book) {
+            $barcode = date('Ymd').sprintf("%06d", mt_rand(1, 999999));
+        } else {
+            $barcode = $check_barcode;
+        }
+
+        return view('admin.books.create', compact('barcode'));
     }
 
     /**
@@ -82,8 +98,13 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\BookRequest $request)
     {
+        if (!Auth::user()->hasRole('admin')) {
+            alert()->error('You are not allowed to manage Books');
+            return back();
+        }
+
         $author_arr = $request->get('author');
         $subject_arr = $request->get('subject');
 
@@ -124,6 +145,8 @@ class BooksController extends Controller
         $books->authors()->sync($author_ids);
         $books->subjects()->sync($subject_ids);
 
+        alert()->success(strtoupper($books->title) . " successfully added");
+
         return redirect('admin/books');
     }
 
@@ -148,7 +171,21 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
-        //
+        if (!Auth::user()->hasRole('admin')) {
+            alert()->error('You are not allowed to manage Books');
+            return back();
+        }
+        $book = Book::find($id);
+
+        $subjects = Subject::lists('name', 'id')->toArray();
+
+        if (!$book) {
+            alert()->error('Book: ' . $id . ' not found');
+
+            return back();
+        }
+
+        return view('admin.books.edit', compact('book', 'subjects'));
     }
 
     /**
@@ -160,7 +197,51 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $author_arr = $request->get('authors');
+        $subject_arr = $request->get('subjects');
+
+        $author_ids = [];
+        $subject_ids = [];
+
+        foreach ($author_arr as $author) {
+            $check_author = Author::where('name', $author)->first();
+
+            if (!$check_author) {
+                $author_data = Author::firstOrCreate([
+                  'name' => $author,
+                ]);
+
+                $author_ids[] = $author_data->id;
+            } else {
+                $author_ids[] = $check_author->id;
+            }
+        }
+
+        foreach ($subject_arr as $subject) {
+            $check_subject = Subject::where('name', $subject)->first();
+
+            if (!$check_subject) {
+                $subject_data = Subject::firstOrCreate([
+                  'name' => $subject,
+                ]);
+
+                $subject_ids[] = $subject_data->id;
+            } else {
+                $subject_ids[] = $check_subject->id;
+            }
+        }
+
+        $book   = Book::with('authors', 'subjects')->find($id);
+        $book->update($request->all());
+
+        $book->save();
+
+        $book->authors()->sync($author_ids);
+        $book->subjects()->sync($subject_ids);
+
+        alert()->success("{$book->title} successfully edited");
+        return redirect('admin/books');
     }
 
     /**
@@ -179,39 +260,5 @@ class BooksController extends Controller
         $this->model_filter->setFormData($request->except('_token'));
 
         return redirect('/admin/books');
-    }
-
-    public function reserve($id)
-    {
-        $book = Book::findOrFail($id);
-
-        if ($book->available_quantity > 0) {
-            $borrowed_quantity = ($book->available_quantity - 1);
-
-            $borrow_book = Transaction::create([
-              'book_id'     => $book->id,
-              'user_id'     => Auth::user()->id,
-              'quantity'    => $book->available_quantity,
-              'type'        => 'reserved',
-              'reserved_at' => Carbon::now(),
-              'borrowed_at' => null,
-              'returned_at' => null,
-              'is_expired'  => false,
-              'is_overdue'  => false,
-              'is_lost'     => false
-            ]);
-
-            $borrow_book->save();
-
-            $book->available_quantity = $borrowed_quantity;
-            $book->save();
-            alert()->success(strtoupper($book->title) . " is now reserved.");
-        } else {
-            alert()->warning("There are no available copies of this book.");
-            return back();
-        }
-
-        return redirect('admin/transaction');
-
     }
 }

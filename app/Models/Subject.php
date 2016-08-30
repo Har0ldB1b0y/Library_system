@@ -20,8 +20,9 @@ class Subject extends Model
         return $this->belongsToMany(Subject::class);
     }
 
-    public function getSubjects()
+    public function getSubjects($id)
     {
-        return $this->orderBy('name', 'ASC')->lists('name', 'name')->toArray();
+
+        return $this->find($id)->orderBy('name', 'ASC')->lists('name', 'name')->toArray();
     }
 }

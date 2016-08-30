@@ -31,6 +31,7 @@
                     <a href="{{url('admin/transaction')}}">TRANSACTIONS</a></li>
 
                     @if (Auth::user()->hasRole('admin'))
+                        <li><a href="/">ISSUE BOOKS</a></li>
                     @if(URL::current() == URL::route('admin.users.index') || URL::current() == URL::route('admin.users.create'))
                         <li class="active">
                     @else
@@ -54,7 +55,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">SETTINGS <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{url('sorting')}}">Change Password</a></li>
+                        <li><a href="/change-password">Change Password</a></li>
                     </ul>
 
                 </li>

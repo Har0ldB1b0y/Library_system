@@ -50,9 +50,9 @@
                     {!! BootForm::text('Card Number', 'card_number') !!}
                     {!! BootForm::text('Title', 'title') !!}
                     {!! BootForm::text('Publisher', 'publisher') !!}
-                    {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year) !!}
-                    {!! BootForm::select('Sort By', 'sort', ['id' => 'ID', 'card_number' => 'Card Number', 'call_number' => 'Call Number', 'title' => 'Title', 'publisher' => 'Publisher', 'published_year' => 'Year Published']) !!}
-                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending']) !!}
+                    {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year)->style('width:100%') !!}
+                    {!! BootForm::select('Sort By', 'sort', ['id' => 'ID', 'card_number' => 'Card Number', 'call_number' => 'Call Number', 'title' => 'Title', 'publisher' => 'Publisher', 'published_year' => 'Year Published'])->style('width:100%') !!}
+                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending'])->style('width:100%') !!}
                     {!! BootForm::submit('Search')->addClass('btn btn-success') !!}
                     {!! BootForm::close() !!}
                 </div>
@@ -62,6 +62,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover table-condensed table-bordered">
                             <tr class="search-panel">
+                                <th style="text-align: center">Barcode</th>
                                 <th>Card Number</th>
                                 <th>Call Number</th>
                                 <th>Title</th>
@@ -74,7 +75,11 @@
                             </tr>
                             @forelse($books as $book)
                                 <tr>
-                                    <td><div class="barcode" style="height:30px">{{$book->barcode}}</div>
+                                    <td style="text-align: center;">
+                                        <div class="barcode" style="height:60px">{{$book->barcode}}</div>
+                                        {{$book->barcode}}
+                                    </td>
+                                    <td>{{$book->card_number}}</td>
                                     <td>{{$book->call_number}}</td>
                                     <td>{{$book->title}}</td>
                                     <td>
@@ -90,7 +95,7 @@
                                     <td>{{$book->publisher}}</td>
                                     <td>{{$book->published_year}}</td>
                                     <td>
-                                        <a href="{{url('admin/users/' . $book->id) . '/edit'}}" role="button" class="btn btn-success btn-xs">Edit</a>
+                                        <a href="{{url('admin/books/' . $book->id) . '/edit'}}" role="button" class="btn btn-success btn-xs">Edit</a>
                                     </td>
                                 </tr>
                             @empty
@@ -113,8 +118,8 @@
 
 @endsection
 
-@section('javascript')
-    <script src="js/jquery-barcode.min.js"></script>
+@section('page_js')
+    <script src="/js/jquery-barcode.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $(".barcode").each(function (i, e) {

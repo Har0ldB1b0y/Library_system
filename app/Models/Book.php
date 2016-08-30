@@ -9,6 +9,7 @@ class Book extends Model
     protected $table = 'books';
 
     protected $fillable = ['title',
+      'barcode',
       'publisher',
       'published_year',
       'card_number',
@@ -47,6 +48,11 @@ class Book extends Model
         }
 
         return $barcode;
+    }
+
+    public function getSubjectsListAttribute()
+    {
+        return $this->authors()->pluck('name', 'id');
     }
 
 }

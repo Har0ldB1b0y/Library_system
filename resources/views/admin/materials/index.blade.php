@@ -44,8 +44,8 @@
                     {!! BootForm::open()->action('/admin/materials/filter') !!}
                     {!! BootForm::bind($filters) !!}
                     {!! BootForm::text('Name', 'name') !!}
-                    {!! BootForm::select('Sort By', 'sort', ['id' => 'ID', 'name' => 'Name']) !!}
-                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending']) !!}
+                    {!! BootForm::select('Sort By', 'sort', ['id' => 'ID', 'name' => 'Name'])->style('width:100%') !!}
+                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending'])->style('width:100%') !!}
                     {!! BootForm::submit('Search')->addClass('btn btn-success') !!}
                     {!! BootForm::close() !!}
                 </div>

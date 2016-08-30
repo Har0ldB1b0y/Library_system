@@ -17,8 +17,8 @@
                 <div class="panel-body">
                     {!! BootForm::openHorizontal(['sm' => [1,11]])->addClass('search-panel') !!}
                     {!! BootForm::bind($request) !!}
-                    {!! BootForm::select('Filter By', 'filter_by', ['' => '-- FILTER SEARCH --', 'books.title' => 'Book Title', 'authors.name' => 'Author', 'subjects.name' => 'Subject'])->addClass('excludeSelect') !!}
-                    {!! BootForm::text('Search', 'search') !!}
+                    {!! BootForm::select('Filter By', 'filter_by', ['books.title' => 'Book Title', 'authors.name' => 'Author', 'subjects.name' => 'Subject'])->style('width:100%') !!}
+                    {!! BootForm::select('Search', 'search')->style('width:100%') !!}
                     {!! BootForm::close() !!}
 
                 </div>
@@ -82,3 +82,48 @@
 
 </div>
 @stop
+
+@section('page_js')
+    <script type="text/javascript">
+        $(function() {
+            $('#search').on('select2:select', function() {
+                $(this).closest('form').submit();
+            });
+
+            function search(url) {
+                $("#search").select2({
+                    allowClear: true,
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: url,
+                        data: function (params) {
+                            return {
+                                q: params.term,
+                                page: params.page
+                            };
+                        }
+                    }
+                });
+            }
+            var filter_by = $("#filter_by");
+
+
+            var search_url = filter_by.val().substring(0, filter_by.val().indexOf("."));
+
+            search("/" + search_url + "/search");
+
+            filter_by.on('change', function() {
+                if (filter_by.val() == 'books.title') {
+                    search('/books/search');
+
+                } else if (filter_by.val() == 'authors.name') {
+                    search('/authors/search');
+
+                } else if (filter_by.val() == 'subjects.name') {
+                    search('/subjects/search');
+                }
+            });
+
+        });
+    </script>
+@endsection

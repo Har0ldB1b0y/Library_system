@@ -40,8 +40,8 @@
                     {!! BootForm::text('Faculty/Student ID', 'user_id') !!}
                     {!! BootForm::text('Name', 'name') !!}
                     {!! BootForm::text('Email', 'email') !!}
-                    {!! BootForm::select('Sort By', 'sort', ['user_id' => 'Faculty/Student ID', 'name' => 'Name', 'email' => 'Email'])->addClass('select2') !!}
-                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending'])->addClass('select2') !!}
+                    {!! BootForm::select('Sort By', 'sort', ['user_id' => 'Faculty/Student ID', 'name' => 'Name', 'email' => 'Email'])->addClass('select2')->style('width:100%') !!}
+                    {!! BootForm::select('Order By', 'order', ['' => '-- Select One --', 'ASC' => 'Ascending', 'DESC' => 'Descending'])->addClass('select2')->style('width:100%') !!}
                     {!! BootForm::submit('Search')->addClass('btn btn-success') !!}
                     {!! BootForm::close() !!}
                 </div>
