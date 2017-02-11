@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Jobs\GenerateBookList;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Report;
 use App\Models\Subject;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -63,6 +66,8 @@ class BooksController extends Controller
             $books = $this->model_filter->filter($query)->orderBy('id', 'ASC')->paginate(10);
         }
 
+//        dd($books->toArray());
+
         return view('admin.books.index', compact('books', 'filters'));
     }
 
@@ -100,6 +105,13 @@ class BooksController extends Controller
      */
     public function store(Requests\BookRequest $request)
     {
+//        dd($request->except('_token', 'author', 'subject'));
+        $request_vals = $request->except('_token', 'author', 'subject');
+
+        foreach ($request_vals as $request_val) {
+            $request_vals['available_quantity'] = $request->get('quantity');
+        }
+
         if (!Auth::user()->hasRole('admin')) {
             alert()->error('You are not allowed to manage Books');
             return back();
@@ -139,7 +151,7 @@ class BooksController extends Controller
             }
         }
 
-        $books = Book::create($request->except('_token', 'author', 'subject'));
+        $books = Book::create($request_vals);
         $books->save();
 
         $books->authors()->sync($author_ids);
@@ -160,7 +172,9 @@ class BooksController extends Controller
     {
         $book = Book::with('authors', 'subjects')->findOrFail($id);
 
-        return view('admin.books.show', compact('book'));
+        $users = User::lists('name', 'id')->toArray();
+
+        return view('admin.books.show', compact('book', 'users'));
     }
 
     /**
@@ -175,17 +189,34 @@ class BooksController extends Controller
             alert()->error('You are not allowed to manage Books');
             return back();
         }
-        $book = Book::find($id);
+        $book_base = Book::find($id);
 
-        $subjects = Subject::lists('name', 'id')->toArray();
+        $book_subjects = $book_base->subjects;
+        $author_books = $book_base->authors;
 
+        $book   = $book_base->toArray();
+        $book['subjects']  = [];
+        foreach ($book_subjects as $this_subject) {
+            $book['subjects'][$this_subject->id]    = $this_subject->name;
+        }
+
+        $book['authors'] = [];
+        foreach ($author_books as $this_author) {
+            $book['authors'][$this_author->id]     = $this_author->name;
+        }
+
+        $subjects = Subject::whereIn('id', array_keys($book['subjects']))->lists('name', 'name')->toArray();
+
+        $authors = Author::whereIn('id', array_keys($book['authors']))->lists('name', 'name')->toArray();
+
+//        dd($authors, $subjects, $book);
         if (!$book) {
             alert()->error('Book: ' . $id . ' not found');
 
             return back();
         }
 
-        return view('admin.books.edit', compact('book', 'subjects'));
+        return view('admin.books.edit', compact('book', 'subjects', 'authors'));
     }
 
     /**
@@ -198,6 +229,7 @@ class BooksController extends Controller
     public function update(Request $request, $id)
     {
 
+        dd($request->all());
         $author_arr = $request->get('authors');
         $subject_arr = $request->get('subjects');
 
@@ -232,6 +264,7 @@ class BooksController extends Controller
             }
         }
 
+//        dd($author_ids, $subject_ids);
         $book   = Book::with('authors', 'subjects')->find($id);
         $book->update($request->all());
 
@@ -260,5 +293,33 @@ class BooksController extends Controller
         $this->model_filter->setFormData($request->except('_token'));
 
         return redirect('/admin/books');
+    }
+
+    public function downloadBooks(Request $request)
+    {
+        $report = new Report($request->all());
+        $report->created_by_id = Auth::user()->id;
+        $report->save();
+
+        $this->dispatch(new GenerateBookList($report, $request->except('_token')));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success'
+        ]);
+    }
+
+    public function archive(Request $request, $id)
+    {
+//        dd($request->all());
+        $book = Book::find($request->get('book-id'));
+
+        $book->archive = 'Yes';
+        $book->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success'
+        ]);
     }
 }

@@ -98,6 +98,15 @@
                             q: params.term,
                             page: params.page
                         };
+                    },
+                    processResults: function (data) {
+                        var authors = $.map(data.results, function (obj) {
+                            obj.id = obj.text;
+                            return obj;
+                        });
+                        return {
+                            results: authors
+                        };
                     }
                 }
             });
@@ -112,6 +121,15 @@
                         return {
                             q: params.term,
                             page: params.page
+                        };
+                    },
+                    processResults: function (data) {
+                        var authors = $.map(data.results, function (obj) {
+                            obj.id = obj.text;
+                            return obj;
+                        });
+                        return {
+                            results: authors
                         };
                     }
                 }

@@ -88,7 +88,7 @@ class UsersController extends Controller
             'name'  => $request->input('name'),
             'user_id' => $request->input('user_id'),
             'email' => $request->input('email'),
-            'password'  => $request->input('password')
+            'password'  => bcrypt($request->input('password'))
         ]);
         $user->save();
 

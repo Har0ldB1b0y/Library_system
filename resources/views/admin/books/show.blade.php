@@ -37,6 +37,25 @@
             }
 
             ?>
+                <div id="reserve_book_admin" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h5 class="modal-title">INPUT BORROWER's NAME</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p></p>
+
+                                {!! BootForm::open()->id('reserveBookAdmin') !!}
+                                {!! BootForm::select('Users', 'user_id', ['' => '-- Select One --'] + $users)->style('width:100%') !!}
+                                {!! BootForm::button('Reserve', 'reserve-admin')->class('btn btn-success form-control reserve-admin') !!}
+                                {!! BootForm::close() !!}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <div class="col-sm-8 col-sm-offset-2 self-class">
                 <p style="font-size: 25px; text-align: center"><strong style="color:#3c763d">{{strtoupper($book->title)}} </strong></p>
                 <br>
@@ -78,9 +97,20 @@
                         <td>{{ $book->available_quantity }}</td>
                     </tr>
                 </table>
-                {!! BootForm::open()->id('reserveBook')->post()->action(url('admin/reserve-books/' . $book->id)) !!}
-                {!! BootForm::submit('Reserve', 'reserve')->class('btn btn-success form-control reserve') !!}
-                {!! BootForm::close() !!}
+                @if (!Auth::user()->hasRole('admin'))
+                    {!! BootForm::open()->id('reserveBook')->post()->action(url('admin/reserve-books/' . $book->id)) !!}
+                    {!! BootForm::submit('Reserve', 'reserve')->class('btn btn-success form-control reserve') !!}
+                    {!! BootForm::close() !!}
+                @else
+                    {!! BootForm::open() !!}
+
+                    <a data-toggle="modal"
+                       data-target="#reserve_book_admin"
+                       {{--href="/admin/lost-book/{{$transaction->id}}"--}}
+                       class="btn btn-success form-control">Reserve</a>
+                    {{--{!! BootForm::button('Reserve', 'reserve-admin')->class('btn btn-success form-control reserve-admin') !!}--}}
+                    {!! BootForm::close() !!}
+                @endif
             </div>
         </div>
     </div>
@@ -95,6 +125,54 @@
             $('.reserve').prop('disabled', false);
             $("#reserveBook").on('submit', function (e) {
                 $('.reserve').attr('disabled', 'disabled');
+            });
+
+            $("#user_id").select2({
+                placeholder: "-- Select Name --",
+                allowClear: true,
+                minimumInputLength: 3,
+                ajax: {
+                    url: '/users/search',
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    }
+                }
+            });
+
+            $('.reserve-admin').prop('disabled', false);
+
+            $(".reserve-admin").on('click', function(e) {
+                var url = '/admin/reserve-books-admin/' + "{{$book->id}}";
+                $('.reserve-admin').attr('disabled', 'disabled');
+
+                    var form_data = $("#reserveBookAdmin").serialize();
+                    console.log(form_data);
+
+                    $.post(url, form_data, function (data) {
+                        console.log(data);
+                        console.log(form_data);
+
+                        if (data.success) {
+                            swal({
+                                title: data.message,
+//                                text: "Please wait while the system is processing the payment",
+                                showConfirmButton: true
+                            });
+
+//                            window.setTimeout(function () {
+//                            }, 3000);
+                        } else {
+                            swal({
+                                title: data.message,
+//                                text: "Please wait while the system is processing the payment",
+                                showConfirmButton: true
+                            });
+                            $('.reserve-admin').prop('disabled', false);
+                        }
+                });
             });
         });
     </script>

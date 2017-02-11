@@ -15,7 +15,13 @@ class Transaction extends Model
     protected $fillable = ['book_id', 'user_id',
       'type',
       'status',
+      'reserved_at',
       'borrowed_at',
+      'is_lost',
+      'is_expired',
+      'expired_at',
+      'is_damaged',
+      'is_rejected'
     ];
 
     public function book()

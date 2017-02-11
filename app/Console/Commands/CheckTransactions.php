@@ -7,6 +7,7 @@ use App\Models\Fee;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CheckTransactions extends Command
 {
@@ -44,6 +45,10 @@ class CheckTransactions extends Command
         //Checking For Overdue
         $transactions = Transaction::where('status', 'borrowed')->get();
 
+        if ($transactions) {
+            Log::info('with transaction');
+        }
+
         $count = 0;
         foreach ($transactions as $transaction) {
             $book = Book::with('subjects')->where('id', $transaction->book_id)->first();
@@ -66,29 +71,44 @@ class CheckTransactions extends Command
             if ($transaction->type == 'reserved') {
 
                 if (Carbon::now() > $transaction->return_at) {
-                    $overdue_day_counts = Carbon::now()->diffInDays(Carbon::parse($transaction->return_at));
-
                     $fees = Fee::where('transaction_id', $transaction->id)->first();
+
+                    $overdue_day_counts = '';
 
                     if ($fees) {
                         $added_amount = 0;
-                        if ($overdue_day_counts !== $fees->overdue_day_counts) {
-                            foreach($subs as $key => $value) {
-                                if (strpos($value, 'Fiction') !== false) {
+                        foreach($subs as $key => $value) {
+                            if (strpos($value, 'Fiction') !== false) {
+                                $overdue_day_counts = Carbon::now()->diffInWeeks(Carbon::parse($transaction->return_at));
+
+                                $fees->overdue_day_counts = $overdue_day_counts;
+                                $fees->save();
+
+                                $daycount = $overdue_day_counts + $fees->overdue_day_counts;
+
+                                if ($daycount > $fees->overdue_day_counts) {
                                     $added_amount = 3;
-                                } else {
-                                    $added_amount = 5;
                                 }
+
+                            } else {
+                                $added_amount = 5;
+                                $overdue_day_counts = Carbon::now()->diffInDays(Carbon::parse($transaction->return_at));
+
+                                $fees->overdue_day_counts = $overdue_day_counts;
+                                $fees->save();
                             }
                         }
 
-                        $total_amount = ($overdue_day_counts - 1) * $added_amount;
+                        $overdue_fees_count = Fee::select('overdue_day_counts')->where('transaction_id', $transaction->id)->first();
+
+                        $total_amount = ($overdue_fees_count->overdue_day_counts) * $added_amount;
+//
 
                         $fees->transaction_id = $transaction->id;
                         $fees->user_id = $transaction->user_id;
                         $fees->type = 'overdue';
                         $fees->receipt_no = '';
-                        $fees->amount += $total_amount;
+                        $fees->amount = $total_amount + $amount;
                         $fees->overdue_day_counts = $overdue_day_counts;
 
                         $fees->save();
@@ -102,7 +122,7 @@ class CheckTransactions extends Command
                            'type'               => 'overdue',
                            'amount'             => $amount,
                            'receipt_no'         => '',
-                           'overdue_day_counts'  => 1
+                           'overdue_day_counts'  => 0
                         ]);
                     }
 

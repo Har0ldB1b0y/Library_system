@@ -16,10 +16,10 @@ class CreateBooksTable extends Migration
             $table->increments('id');
             $table->string('title')->index();
             $table->string('barcode', 50)->index();
-            $table->string('publisher', 50);
+            $table->string('publisher', 50)->index();
             $table->integer('published_year');
             $table->string('card_number', 50);
-            $table->string('call_number', 50);
+            $table->string('call_number', 50)->index();
             $table->integer('quantity')->unsigned();
             $table->integer('available_quantity')->unsigned()->nullable();
             $table->integer('material_id')->unsigned();
@@ -42,6 +42,7 @@ class CreateBooksTable extends Migration
             $table->string('editor')->nullable();
             $table->string('illustrator')->nullable();
             $table->string('compiler')->nullable();
+            $table->string('image_source')->nullable();
 
             $table->timestamps();
         });

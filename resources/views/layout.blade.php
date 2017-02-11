@@ -168,6 +168,10 @@
     @yield('content')
 </div>
 
+<script>
+    var socketio_base = "{{config('services.socketio.url')}}";
+</script>
+
 <script src="{{ elixir('js/all.js') }}"></script>
 @include('sweet::alert')
 @yield('page_js')

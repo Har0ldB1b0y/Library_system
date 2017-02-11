@@ -15,7 +15,20 @@ class Book extends Model
       'card_number',
       'call_number',
       'quantity',
-      'material_id'
+      'material_id',
+      'publish_place',
+      'isbn',
+      'etal',
+      'edition',
+      'physical_desc',
+      'aetitle',
+      'stitle',
+      'book_level',
+      'editor',
+      'illustrator',
+      'compiler',
+      'note',
+      'available_quantity'
     ];
 
     public function authors()
@@ -50,9 +63,9 @@ class Book extends Model
         return $barcode;
     }
 
-    public function getSubjectsListAttribute()
+    public function getSubjectListAttribute()
     {
-        return $this->authors()->pluck('name', 'id');
+        return $this->subjects->lists('id');
     }
 
 }

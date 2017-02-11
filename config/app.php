@@ -160,6 +160,8 @@ return [
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
         AdamWathan\BootForms\BootFormsServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -212,6 +214,9 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
         'BootForm' => AdamWathan\BootForms\Facades\BootForm::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'PDF'   => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

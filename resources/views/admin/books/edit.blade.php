@@ -1,6 +1,6 @@
 @inject('materials', 'App\Models\Material')
-@inject('authors', 'App\Models\Author')
-@inject('subjects', 'App\Models\Subject')
+{{--@inject('authors', 'App\Models\Author')--}}
+{{--@inject('subjects', 'App\Models\Subject')--}}
 @inject('books', 'App\Models\Book')
 
 
@@ -41,14 +41,15 @@
                         $year[$i] = $i;
                     }
                     ?>
-                    {!! BootForm::open()->patch()->action(url('admin/books/' . $book->id)) !!}
+                    {!! BootForm::open()->patch()->action(url('admin/books/' . $book['id'])) !!}
                     {!! BootForm::bind($book) !!}
                     {!! BootForm::text('Card Number', 'card_number')->required() !!}
                     {!! BootForm::text('Call Number', 'call_number')->required() !!}
                     {!! BootForm::text('Title', 'title')->required() !!}
-                    {!! BootForm::select('Author', 'authors')->id('authors')->required()->data('tags', true)->multiple
+                    {!! BootForm::select('Author', 'authors')->options($authors)->id('authors')->required()->data('tags', true)->multiple
                     ()->style('width:100%') !!}
-                    {!! BootForm::select('Subject', 'subjectsList[]', $subjects->getSubjects($book->id))->id('subjects')->required()->data('tags', true)->multiple()->style('width:100%') !!}
+                        {{--{!! var_dump($subjects) !!}--}}
+                    {!! BootForm::select('Subject', 'subjects')->options($subjects)->id('subjects')->required()->data('tags', true)->multiple()->style('width:100%') !!}
                     {!! BootForm::select('Material Type', 'material_id', ['' => ''] + $materials->getMaterials())->placeholder('Material Type')->required()->style('width:100%') !!}
                     {!! BootForm::text('Publisher', 'publisher')->required() !!}
                     {!! BootForm::select('Year Published', 'published_year', ['' => ''] + $year)->required()->style
@@ -56,7 +57,7 @@
                     {!! BootForm::text('Publish Place', 'publish_place')->required() !!}
                     <div class="form-group">
                         <label class="control-label" for="quantity">Copies Available</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" required="required">
+                        <input type="number" name="quantity" id="quantity" value="{{ $book['quantity'] }}"class="form-control" required="required">
                     </div>
                     {!! BootForm::text('ISBN', 'isbn') !!}
                     {!! BootForm::select('ETAL', 'etal', ['' => '', 'True' => 'True', 'False' => 'False'])->style('width:100%') !!}
@@ -101,24 +102,42 @@
                             q: params.term,
                             page: params.page
                         };
+                    },
+                    processResults: function (data) {
+                        var authors = $.map(data.results, function (obj) {
+                            obj.id = obj.text;
+                            return obj;
+                        });
+                        return {
+                            results: authors
+                        };
                     }
                 }
             });
 
-//            $("#subjects").select2({
-//                placeholder: "-- Select Subjects --",
-//                allowClear: true,
-//                minimumInputLength: 3,
-//                ajax: {
-//                    url: '/subjects/search',
-//                    data: function (params) {
-//                        return {
-//                            q: params.term,
-//                            page: params.page
-//                        };
-//                    }
-//                }
-//            });
+            $("#subjects").select2({
+                placeholder: "-- Select Subjects --",
+                allowClear: true,
+                minimumInputLength: 3,
+                ajax: {
+                    url: '/subjects/search',
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data) {
+                        var authors = $.map(data.results, function (obj) {
+                            obj.id = obj.text;
+                            return obj;
+                        });
+                        return {
+                            results: authors
+                        };
+                    }
+                }
+            });
 
             $("#published_year").select2({
                 placeholder: "-- Select Year Published --",

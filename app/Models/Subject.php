@@ -15,14 +15,13 @@ class Subject extends Model
         return $this->belongsToMany(Book::class);
     }
 
-    public function subjects()
+    public function authors()
     {
-        return $this->belongsToMany(Subject::class);
+        return $this->belongsToMany(Author::class);
     }
 
     public function getSubjects($id)
     {
-
-        return $this->find($id)->orderBy('name', 'ASC')->lists('name', 'name')->toArray();
+        return $this->find($id)->orderBy('name', 'ASC')->lists('name', 'id');
     }
 }

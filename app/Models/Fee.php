@@ -8,7 +8,7 @@ class Fee extends Model
 {
     protected $table = 'fees';
 
-    protected $fillable = ['transaction_id', 'user_id', 'type', 'amount', 'is_paid', 'receipt_no', 'overdue_day_counts'];
+    protected $fillable = ['transaction_id', 'user_id', 'type', 'amount', 'is_paid', 'receipt_no', 'overdue_day_counts', 'with_change', 'change'];
 
     public function transaction()
     {

@@ -36,6 +36,8 @@ class CreateFeesTable extends Migration
             $table->integer('amount');
             $table->boolean('is_paid')->nullable();
             $table->string('receipt_no')->nullable();
+            $table->boolean('with_change')->nullable();
+            $table->integer('change')->nullable();
             $table->timestamps();
         });
     }

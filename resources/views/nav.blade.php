@@ -30,14 +30,19 @@
                     @endif
                     <a href="{{url('admin/transaction')}}">TRANSACTIONS</a></li>
 
-                    @if (Auth::user()->hasRole('admin'))
-                        <li><a href="/">ISSUE BOOKS</a></li>
-                    @if(URL::current() == URL::route('admin.users.index') || URL::current() == URL::route('admin.users.create'))
+                @if (Auth::user()->hasRole('admin'))
+                    @if (URL::current() == URL::route('admin.transaction.issue-books'))
                         <li class="active">
                     @else
                         <li>
                     @endif
-                    <a href="{{url('admin/users')}}">USERS</a></li>
+                        {{--<a href="/admin/transaction/issue-books">ISSUE BOOKS</a></li>--}}
+                    {{--@if(URL::current() == URL::route('admin.users.index') || URL::current() == URL::route('admin.users.create'))--}}
+                        {{--<li class="active">--}}
+                    {{--@else--}}
+                        {{--<li>--}}
+                    {{--@endif--}}
+                    {{--<a href="{{url('admin/users')}}">USERS</a></li>--}}
 
                     @if(URL::current() == URL::route('admin.books.index') || URL::current() == URL::route('admin.books.create') || URL::current() == URL::route('admin.materials.index') || URL::current() == URL::route('admin.materials.create'))
                         <li class="active">
@@ -46,7 +51,7 @@
                     @endif
                     <a href="{{url('admin/books')}}">BOOKS</a></li>
 
-                    <li><a href="{{url('admin/users')}}">REPORTS</a></li>
+                    <li><a href="{{url('admin/reports')}}">REPORTS</a></li>
 
                 @endif
 

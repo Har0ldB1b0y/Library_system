@@ -25,7 +25,7 @@ class EditUserRequest extends Request
     {
         return [
           'name' => 'required|max:255',
-          'user_id' => 'required',
+          'user_id' => 'required|numeric',
           'email' => 'required|email|max:255|unique:users,email,' . $this->input('id'),
           'password' => 'min:6'
         ];

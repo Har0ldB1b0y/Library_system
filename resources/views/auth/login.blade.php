@@ -79,22 +79,22 @@
                     @endif
             </div>
 
-            <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="remember"><span class="text-success"> Remember Me </span>
-                        </label>
-                    </div>
-            </div>
+            {{--<div class="form-group">--}}
+                    {{--<div class="checkbox">--}}
+                        {{--<label>--}}
+                            {{--<input type="checkbox" name="remember"><span class="text-success"> Remember Me </span>--}}
+                        {{--</label>--}}
+                    {{--</div>--}}
+            {{--</div>--}}
 
             <div class="form-group">
                     <button type="submit" class="btn btn-success form-control">
                         <i class="fa fa-btn fa-sign-in"></i> SIGN IN
                     </button>
-                    <div style="text-align: center">
-                    <a class="btn btn-link" style="color:#5cb85c"  href="{{ url('/password/reset') }}">Forgot Your
-                                                                                                 Password?</a>
-                    </div>
+                    {{--<div style="text-align: center">--}}
+                    {{--<a class="btn btn-link" style="color:#5cb85c"  href="{{ url('/password/reset') }}">Forgot Your--}}
+                                                                                                 {{--Password?</a>--}}
+                    {{--</div>--}}
             </div>
             </div>
 

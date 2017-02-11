@@ -12,8 +12,12 @@
 
 <div class="container-fluid">
 	@include('flash::message')
-    @yield('content')
+  @yield('content')
 </div>
+
+<script>
+    var socketio_base = "{{config('services.socketio.url')}}";
+</script>
 
 <script src="{{ elixir('js/all.js') }}"></script>
 @include('sweet::alert')
